@@ -14,7 +14,7 @@ for token in tokens:
     try:
         word = float(word)
         word = "numeric-word"
-    except:
+    except Exception:
         pass
     pairs.append((word, tag))
 
@@ -25,20 +25,30 @@ df = pl.DataFrame([
     for (word, tag), count in counts.items()
 ])
 
+# Transforma todas palavras com count=1 em unk-word
+df = df.with_columns(
+    pl.when(pl.col("count") == 1)
+      .then(pl.lit("unk-word"))
+      .otherwise(pl.col("word"))
+      .alias("word")
+)
+
 df = df.sort(["count"], descending=True)
-df = df.pivot(on="tag",index="word",values="count")
+df = df.pivot(on="tag",index="word",values="count", aggregate_function="sum")
 
 # Cria coluna de contagem total
 df = df.with_columns(
     appearances = pl.sum_horizontal(col for col in df.columns[1:])
 )
 
-# Transforma todas palavras com count=1 em unk-word
-df = df.with_columns(
-
-)
+df = df.fill_null(0)
 
 # Seleciona apenas a coluna com maior count
+tags = [col for col in df.columns if col not in ["word", "appearances"]]
+df = df.with_columns(
+    pl.struct(tags).map_elements(lambda s: max(s, key=lambda k: s[k]), return_dtype=pl.Utf8).alias("max_tag")
+)
 
+df = df[["word", "max_tag", "appearances"]]
 
-df.to_pandas().to_csv("data/dataset/unigram_pl.csv")
+df.to_pandas().to_csv("data/dataset/unigram.csv")
