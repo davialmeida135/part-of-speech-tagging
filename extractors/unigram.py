@@ -51,4 +51,4 @@ df = df.with_columns(
 
 df = df[["word", "max_tag", "appearances"]]
 
-df.to_pandas().to_csv("data/dataset/unigram.csv")
+df.to_pandas().to_csv("data/models/unigram.csv")
