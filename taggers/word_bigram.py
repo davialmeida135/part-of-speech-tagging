@@ -1,6 +1,5 @@
 from unigram import UnigramDriver
 import pandas as pd
-import re
 class BigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
