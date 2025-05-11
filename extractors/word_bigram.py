@@ -50,8 +50,8 @@ def generate_bigram_dataset(data: str):
     df = df.with_columns(
         pl.when(pl.col("count") == 1)
           .then(pl.lit("unk-word"))
-          .otherwise(pl.col("first"))
-          .alias("first")
+          .otherwise(pl.col("second"))
+          .alias("second")
     )
 
     df = df.sort("count", descending=True)
@@ -75,5 +75,8 @@ def generate_bigram_dataset(data: str):
         
     return df
 
-df = generate_bigram_dataset("data/raw/Secs0-18 - training")
-df.to_pandas().to_csv("data/models/bigram.csv", index=False)
+if __name__ == "__main__":
+    # Gera o dataset de bigramas a partir do arquivo de treinamento
+    # e salva em um arquivo CSV
+    df = generate_bigram_dataset("data/raw/Secs0-18 - training")
+    df.to_pandas().to_csv("data/models/bigram.csv", index=False)

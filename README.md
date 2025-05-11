@@ -2,13 +2,13 @@
 Trabalho da disciplina de processamento de linguagem natural, UFRN 2025.1
 
 ## Variações para serem testadas
-## Unigram
 - Alterar o threshold de palavra desconhecida
+### Unigram
 
-## Bigram word
+### Bigram word
 
-## Bigram tag
+### Bigram tag
 
-## Trigram word
+### Trigram word
 
-## Trigram tag
+### Trigram tag

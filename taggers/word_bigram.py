@@ -1,14 +1,18 @@
-
+from unigram import UnigramDriver
 import pandas as pd
 import re
-class UnigramDriver:
+class BigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
     """
+    def __init__(self):
+        self.unigram_driver = UnigramDriver()
+        self.unigram_driver.fit("data/models/unigram.csv")
+
     def fit(self, data:str):
         """
         Carrega o modelo Unigram a partir de um arquivo CSV.
-        O arquivo CSV deve conter as colunas 'word' e 'max_tag'
+        O arquivo CSV deve conter as colunas 'first', 'second' e 'max_tag'
         """
         self.train_data = pd.read_csv(data)
 
@@ -16,28 +20,52 @@ class UnigramDriver:
         """
         Tags the input text with the specified tag.
         """
+        # Adiciona BOS e EOS
+        text = "BOS " + text
         tags = []
-        unk_word_tag = self.train_data.loc[self.train_data['word'] == "unk-word", 'max_tag'].values[0]
-        numeric_word_tag = self.train_data.loc[self.train_data['word'] == "numeric-word", 'max_tag'].values[0]
-        for word in text.split():
-            if word in self.train_data['word'].values:
-                tag = self.train_data.loc[self.train_data['word'] == word, 'max_tag'].values[0]
-                tagged_word = "{}_{}".format(word, tag)
-                tags.append(tagged_word)
-                continue
+        text = text.split()
+        for i in range(len(text) - 1):
+            first_word = text[i] # Previous word
+            second_word = text[i + 1] # Word to be tagged
+
+            # Verifica se o primeiro token é um número
             try:
-                float(word)
-                tagged_word = "{}_{}".format(word, numeric_word_tag)
+                float(first_word)
+                first_word = "numeric-word"
+            except Exception:
+                pass
+            # Verifica se o segundo token é um número
+            try:
+                float(second_word)
+                second_word = "numeric-word"
+            except Exception:
+                pass
+
+            # Tenta encontrar a tupla completa
+            try:
+                tag = self.train_data.loc[(self.train_data['first'] == first_word) & (self.train_data['second'] == second_word), 'max_tag'].values[0]
+                tagged_word = "{}_{}".format(second_word, tag)
                 tags.append(tagged_word)
                 continue
             except Exception:
                 pass
             
-            tagged_word = "{}_{}".format(word, unk_word_tag)
-            tags.append(tagged_word)
+            # Tenta encontrar apenas o primeiro token
+            try:
+                tag = self.train_data.loc[(self.train_data['first'] == first_word) & (self.train_data['second'] == "unk-word"), 'max_tag'].values[0]
+                tagged_word = "{}_{}".format(second_word, tag)
+                tags.append(tagged_word)
+                continue
+            except Exception:
+                pass
+
+            # Em ultimo caso, voltamos para o modelo unigram
+            tagged_word = self.unigram_driver.tag(second_word)
+            tags.extend(tagged_word)
 
         return tags
     
+    # TODO
     def tag_dataset(self, dataset:str)-> pd.DataFrame:
         """
         Atribui tags a um dataset de palavras.
@@ -75,7 +103,9 @@ class UnigramDriver:
 
 if __name__ == "__main__":
     # Example usage
-    driver = UnigramDriver()
-    driver.fit("data/models/unigram.csv")
-    tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
-    print(tagged_text.head())
+    driver = BigramDriver()
+    driver.fit("data/models/bigram.csv")
+    tags = driver.tag("closely watching a super man")
+    print(tags)
+    #tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
+    #print(tagged_text.head())
