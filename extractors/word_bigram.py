@@ -45,14 +45,6 @@ def generate_bigram_dataset(data: str):
         for (first, second, tag), count in counts.items()
     ])
 
-    # Transforma todas as palavras com count == 1 em unk-word na coluna "first"
-    df = df.with_columns(
-        pl.when(pl.col("count") == 1)
-          .then(pl.lit("unk-word"))
-          .otherwise(pl.col("second"))
-          .alias("second")
-    )
-
     df = df.sort("count", descending=True)
     df = df.pivot(on="tag",index=["first","second"],values="count", aggregate_function="sum")
 
