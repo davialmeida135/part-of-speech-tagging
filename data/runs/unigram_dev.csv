@@ -108786,7 +108786,7 @@ id,word,real,pred
 4567,bonds,NNS,NNS
 4567,.,.,.
 4568,'','',''
-4568,None,NN,NNP
+4568,None,NN,NN
 4568,believe,VBP,VBP
 4568,the,DT,DT
 4568,proposed,VBN,VBN

@@ -1,39 +1,70 @@
 
+import polars as pl
 import pandas as pd
 class UnigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
     """
+    def __init__(self):
+        self.train_data = None
+        self.unk_word_tag = None
+        self.numeric_word_tag = None
+
+    #TODO clean
     def fit(self, data:str):
         """
         Carrega o modelo Unigram a partir de um arquivo CSV.
         O arquivo CSV deve conter as colunas 'word' e 'max_tag'
         """
-        self.train_data = pd.read_csv(data)
+        self.train_data = pl.read_csv(data)
+        # Pre-fetch tags for "unk-word" and "numeric-word" for efficiency
+        try:
+            self.unk_word_tag = self.train_data.filter(pl.col("word") == "unk-word").select("max_tag").item()
+        except pl.exceptions.ColumnNotFoundError: # Handle case where column might not exist or item not found
+             print("Warning: 'unk-word' not found in the model. Defaulting to UNK tag.")
+             self.unk_word_tag = "UNK" # Or some other default
+        except Exception as e:
+            print(f"Error fetching 'unk-word' tag: {e}. Defaulting to UNK tag.")
+            self.unk_word_tag = "UNK"
+        try:
+            self.numeric_word_tag = self.train_data.filter(pl.col("word") == "numeric-word").select("max_tag").item()
+        except pl.exceptions.ColumnNotFoundError:
+            print("Warning: 'numeric-word' not found in the model. Defaulting to NUM tag.")
+            self.numeric_word_tag = "NUM" # Or some other default
+        except Exception as e:
+            print(f"Error fetching 'numeric-word' tag: {e}. Defaulting to NUM tag.")
+            self.numeric_word_tag = "NUM"
 
     def tag(self, text:str)-> list[str]:
         """
         Tags the input text with the specified tag.
         """
         tags = []
-        unk_word_tag = self.train_data.loc[self.train_data['word'] == "unk-word", 'max_tag'].values[0]
-        numeric_word_tag = self.train_data.loc[self.train_data['word'] == "numeric-word", 'max_tag'].values[0]
+
         for word in text.split():
-            if word in self.train_data['word'].values:
-                tag = self.train_data.loc[self.train_data['word'] == word, 'max_tag'].values[0]
-                tagged_word = "{}_{}".format(word, tag)
-                tags.append(tagged_word)
-                continue
+            original_word = word # Keep original for output
+            # Attempt to convert to float first
+            is_numeric = False
             try:
                 float(word)
-                tagged_word = "{}_{}".format(word, numeric_word_tag)
+                is_numeric = True
+            except ValueError:
+                pass
+
+            if is_numeric:
+                tagged_word = "{}_{}".format(original_word, self.numeric_word_tag)
                 tags.append(tagged_word)
                 continue
-            except Exception:
-                pass
-            
-            tagged_word = "{}_{}".format(word, unk_word_tag)
-            tags.append(tagged_word)
+            match = self.train_data.filter(pl.col("word") == word)
+
+            if not match.is_empty():
+                tag = match.get_column("max_tag")[0] # Get the first match
+                tagged_word = "{}_{}".format(original_word, tag)
+                tags.append(tagged_word)
+            else:
+                # If not found and not numeric, use the pre-fetched unk_word_tag
+                tagged_word = "{}_{}".format(original_word, self.unk_word_tag)
+                tags.append(tagged_word)
 
         return tags
     
@@ -50,15 +81,17 @@ class UnigramDriver:
         tagged_dataset = []
         for id,sentence in enumerate(sentences):
 
-            cleaned_sentence = self.remove_tags(sentence)
-            tagged_sentence = self.tag(cleaned_sentence)
+            clean_sentence = self.remove_tags(sentence)
+            tagged_sentence = self.tag(clean_sentence)
 
             # TODO Isso poderia ser assincrono
             for original,tagged in zip(sentence.split(), tagged_sentence):
+                word, real_tag = original.rsplit("_", 1)
+                _, pred_tag = tagged.rsplit("_", 1) 
                 tagged_dataset.append({"id": id,
-                                       "word":original.rsplit("_")[0],
-                                       "real": original.rsplit("_")[-1], 
-                                       "pred": tagged.rsplit("_")[-1]})
+                                       "word":word,
+                                       "real": real_tag, 
+                                       "pred": pred_tag})
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
