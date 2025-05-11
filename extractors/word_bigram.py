@@ -1,5 +1,4 @@
 import polars as pl
-import re
 from collections import Counter
 
 # Gera um dataset com as colunas "first", "second", "tag" e "count"
