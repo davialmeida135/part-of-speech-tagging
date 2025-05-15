@@ -1,19 +1,32 @@
-from unigram import UnigramDriver
+from word_bigram import BigramDriver
 import pandas as pd
 import polars as pl
-class BigramDriver:
+import os
+class TrigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
     """
-    def __init__(self, data:str = "data/models/bigram.csv"):
-        self.unigram_driver = UnigramDriver()
-        self.train_data = pl.read_csv(data)
-        self.unigram_driver.fit("data/models/unigram.csv")
+    def __init__(self, data:str = None, bigram:str = None, unigram:str = None):
+        print("Initializing TrigramDriver")
+        self.self_path = os.path.dirname(os.path.abspath(__file__))
+        self.data_path = data
+        self.bigram_path = bigram
+        self.unigram_path = unigram
+
+        if data is None:
+            self.data_path = os.path.join(self.self_path, "../data/models/trigram.csv")
+        if bigram is None:
+            self.bigram_path = os.path.join(self.self_path, "../data/models/bigram.csv")
+        if unigram is None:
+            self.unigram_path = os.path.join(self.self_path, "../data/models/unigram.csv")
+
+        self.bigram_driver = BigramDriver(self.bigram_path,self.unigram_path)
+        self.train_data = pl.read_csv(self.data_path)
 
     def fit(self, data:str):
         """
-        Carrega o modelo Unigram a partir de um arquivo CSV.
-        O arquivo CSV deve conter as colunas 'first', 'second' e 'max_tag'
+        Carrega o modelo Trigram a partir de um arquivo CSV.
+        O arquivo CSV deve conter as colunas 'first', 'second', 'third' e 'max_tag'
         """
         self.train_data = pl.read_csv(data)
 
@@ -22,13 +35,14 @@ class BigramDriver:
         Tags the input text with the specified tag.
         """
 
-        text = "BOS " + text
+        text = "BOS BOS " + text
         tags = []
         text = text.split()
-        for i in range(len(text) - 1):
+        for i in range(len(text) - 2):
             first_word = text[i] # Previous word
-            second_word = text[i + 1] # Word to be tagged
-            original_second_word = second_word
+            second_word = text[i + 1] # Previous word
+            third_word = text[i + 2] # Word to be tagged
+            original_third_word = third_word
 
             # Verifica se o primeiro token é um número
             try:
@@ -42,26 +56,35 @@ class BigramDriver:
                 second_word = "numeric-word"
             except Exception:
                 pass
+            # Verifica se o terceiro token é um número
+            try:
+                float(third_word)
+                third_word = "numeric-word"
+            except Exception:
+                pass
 
             tagged = False
+
             # Tenta encontrar a tupla completa (first_word, second_word)
             match = self.train_data.filter(
-                (pl.col("first") == first_word) & (pl.col("second") == second_word)
+                (pl.col("first") == first_word) & (pl.col("second") == second_word) & (pl.col("third") == third_word)
             )
             if not match.is_empty():
                 tag = match.get_column("max_tag")[0]
-                tagged_word = "{}_{}".format(original_second_word, tag)
+                tagged_word = "{}_{}".format(original_third_word, tag)
+                #print("Found trigram: ", first_word, second_word, third_word, tag)
                 tags.append(tagged_word)
                 tagged = True
             
-            # Em ultimo caso, voltamos para o modelo unigram
+            # Em ultimo caso, voltamos para o modelo bigram
             if not tagged:
-                unigram_tagged_list = self.unigram_driver.tag(original_second_word) 
-                tags.append(unigram_tagged_list[0])
+                bigram_tagged_list = self.bigram_driver.tag(second_word+" "+original_third_word) 
+                #print("Using bigram: ", second_word, original_third_word, bigram_tagged_list[0])
+                tags.append(bigram_tagged_list[-1])
 
         return tags
     
-    def tag_dataset(self, dataset:str, output:str = "data/runs/bigram_dev.csv")-> pd.DataFrame:
+    def tag_dataset(self, dataset:str, output:str = "data/runs/trigram_dev.csv")-> pd.DataFrame:
         """
         Atribui tags a um dataset de palavras.
         Retorna um DataFrame com as colunas 'id', 'word', 'real' e 'pred'.
@@ -86,7 +109,7 @@ class BigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/bigram_dev.csv", index=False)
+        df.to_csv("data/runs/trigram_dev.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -98,7 +121,7 @@ class BigramDriver:
 
 if __name__ == "__main__":
     # Example usage
-    driver = BigramDriver()
+    driver = TrigramDriver()
     df = driver.tag_dataset("data/raw/Secs19-21 - development")
     print(df.head())
     #tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
