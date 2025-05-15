@@ -1,5 +1,6 @@
 # part-of-speech-tagging
 Trabalho da disciplina de processamento de linguagem natural, UFRN 2025.1
+https://hmoodle.imd.ufrn.br/moodlep/mod/assign/view.php?id=2970
 
 ## O objetivo
 O objetivo do trabalho é implementar um part of speech tagger que classifique as palavras em uma frase de acordo com sua classe gramatical (substantivo, adjetivo etc.). 
@@ -14,18 +15,29 @@ A "fase de treinamento", nesse contexto, é composta pela geração de um datase
 ## A inferência
 A fase de inferência de tags é executada por um módulo de inferência chamado *driver*. O driver utiliza o dataset gerado na fase de treinamento e os conjuntos de desenvolvimento e teste do corpus para predizer a qual tag cada palavra pertence. Ao fim da fase de inferência, é gerado um dataset com as colunas `|Palavra|Tag Real|Tag Inferida|` para facilitar a análise futura dos resultados obtidos.
 
-## Experimentos
+## Análise exploratória
+
+## Experimentos (incluir confusion matrix)
+- Todos os treinamentos foram realizados com o arquivo `Secs0-18 - training` e os testes de desenvolvimento com o arquivo `Secs19-21 - development`.
+- Os resultados finais reportados são de inferências sobre o conjunto `Secs22-24 - testing`
+
 ### Unigrama
 O dataset gerado pelo extractor de unigrama tem o seguinte formato:
 `|Palavra|Tag Máxima|`
 
-Em que "Tag Máxima" representa qual a tag que foi mais atribuída à palavra no corpus de treinamento.
-- Alterar o threshold de palavra desconhecida
+Em que "Tag Máxima" representa qual a tag que foi mais atribuída à palavra no corpus de treinamento. Palavras com aparições iguais ou abaixo de um valor N foram contabilizadas como "unk-word", tendo como sua "Tag Máxima" a tag mais comum atribuída às palavras que satifizeram as condições.
+- Para N = 1, foram obtidos os seguintes resultados: 
 
-### Bigram word
-- Usar unk word x ir direto pro unigram (?)
-- Unk word na 1a x unk word na 2a
-- Bigram tag
+### Bigrama com palavras
 
-### Trigram word
-- Trigram tag
+
+### Trigrama com palavras
+
+
+### Bigrama com tags
+
+### Trigrama com tags
+
+### Métrica própria?
+% de cada tag
+Pode ser baseado nas tags das palavras anteriores ou na tag posterior das palavras anteriores
