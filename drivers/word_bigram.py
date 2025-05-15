@@ -1,18 +1,28 @@
 from unigram import UnigramDriver
 import pandas as pd
 import polars as pl
+import os
 class BigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
     """
-    def __init__(self, data:str = "data/models/bigram.csv"):
-        self.unigram_driver = UnigramDriver()
-        self.train_data = pl.read_csv(data)
-        self.unigram_driver.fit("data/models/unigram.csv")
+    def __init__(self, data:str = None, unigram:str = None):
+        print("Initializing BigramDriver")
+        self.self_path = os.path.dirname(os.path.abspath(__file__))
+        self.data_path = data
+        self.unigram_path = unigram
+
+        if data is None:
+            self.data_path = os.path.join(self.self_path, "../data/models/bigram.csv")
+        if unigram is None:
+            self.unigram_path = os.path.join(self.self_path, "../data/models/unigram.csv")
+
+        self.unigram_driver = UnigramDriver(self.unigram_path)
+        self.train_data = pl.read_csv(self.data_path)
 
     def fit(self, data:str):
         """
-        Carrega o modelo Unigram a partir de um arquivo CSV.
+        Carrega o modelo Bigram a partir de um arquivo CSV.
         O arquivo CSV deve conter as colunas 'first', 'second' e 'max_tag'
         """
         self.train_data = pl.read_csv(data)

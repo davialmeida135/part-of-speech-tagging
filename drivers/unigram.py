@@ -1,12 +1,19 @@
-
 import polars as pl
 import pandas as pd
+import os
 class UnigramDriver:
     """
     Driver que interpreta o modelo Unigram salvo e atribui tags a palavras.
     """
-    def __init__(self):
-        self.train_data = None
+    def __init__(self, data:str = None):
+        print("Initializing UnigramDriver")
+        self.self_path = os.path.dirname(os.path.abspath(__file__))
+        self.data_path = data
+
+        if data is None:
+            self.data_path = os.path.join(self.self_path, "../data/models/unigram.csv")
+
+        self.train_data = pl.read_csv(self.data_path)
         self.unk_word_tag = None
         self.numeric_word_tag = None
 
@@ -17,20 +24,21 @@ class UnigramDriver:
         O arquivo CSV deve conter as colunas 'word' e 'max_tag'
         """
         self.train_data = pl.read_csv(data)
-        # Pre-fetch tags for "unk-word" and "numeric-word" for efficiency
+        # Captura as tags de unk-word e numeric-word
         try:
             self.unk_word_tag = self.train_data.filter(pl.col("word") == "unk-word").select("max_tag").item()
-        except pl.exceptions.ColumnNotFoundError: # Handle case where column might not exist or item not found
+        except pl.exceptions.ColumnNotFoundError:
              print("Warning: 'unk-word' not found in the model. Defaulting to UNK tag.")
-             self.unk_word_tag = "UNK" # Or some other default
+             self.unk_word_tag = "UNK"
         except Exception as e:
             print(f"Error fetching 'unk-word' tag: {e}. Defaulting to UNK tag.")
             self.unk_word_tag = "UNK"
+
         try:
             self.numeric_word_tag = self.train_data.filter(pl.col("word") == "numeric-word").select("max_tag").item()
         except pl.exceptions.ColumnNotFoundError:
             print("Warning: 'numeric-word' not found in the model. Defaulting to NUM tag.")
-            self.numeric_word_tag = "NUM" # Or some other default
+            self.numeric_word_tag = "NUM"
         except Exception as e:
             print(f"Error fetching 'numeric-word' tag: {e}. Defaulting to NUM tag.")
             self.numeric_word_tag = "NUM"
@@ -42,8 +50,7 @@ class UnigramDriver:
         tags = []
 
         for word in text.split():
-            original_word = word # Keep original for output
-            # Attempt to convert to float first
+            original_word = word
             is_numeric = False
             try:
                 float(word)
@@ -55,14 +62,15 @@ class UnigramDriver:
                 tagged_word = "{}_{}".format(original_word, self.numeric_word_tag)
                 tags.append(tagged_word)
                 continue
-            match = self.train_data.filter(pl.col("word") == word)
 
+            # Procura a palavra no dataset
+            match = self.train_data.filter(pl.col("word") == word)
             if not match.is_empty():
-                tag = match.get_column("max_tag")[0] # Get the first match
+                tag = match.get_column("max_tag")[0]
                 tagged_word = "{}_{}".format(original_word, tag)
                 tags.append(tagged_word)
+            # Em último caso, atribui a tag da palavra desconhecida
             else:
-                # If not found and not numeric, use the pre-fetched unk_word_tag
                 tagged_word = "{}_{}".format(original_word, self.unk_word_tag)
                 tags.append(tagged_word)
 
