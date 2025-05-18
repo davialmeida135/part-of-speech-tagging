@@ -30,6 +30,7 @@ Em que "Tag Máxima" representa qual a tag que foi mais atribuída à palavra no
 
 ### Bigrama com palavras
 
+![Confusion Matrix para Bigrama com palavras](./media/bigram_dev.png)
 
 ### Trigrama com palavras
 
