@@ -103,7 +103,7 @@ class UnigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/unigram_dev.csv", index=False)
+        df.to_csv("data/runs/unigram_train.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -117,5 +117,5 @@ if __name__ == "__main__":
     # Example usage
     driver = UnigramDriver()
     driver.fit("data/models/unigram.csv")
-    tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
+    tagged_text = driver.tag_dataset("data/raw/Secs0-18 - training")
     print(tagged_text.head())
