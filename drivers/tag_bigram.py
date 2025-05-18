@@ -65,6 +65,7 @@ class TagBigramDriver:
             
             # Em ultimo caso, voltamos para o modelo unigram
             if not tagged:
+                #print(f"Unigram Word: {original_second_word}")
                 unigram_tagged_list = self.unigram_driver.tag(original_second_word) 
                 #print(f"Uni Tagged Word: {unigram_tagged_list[0]}")
                 tags.append(unigram_tagged_list[0])
@@ -96,7 +97,7 @@ class TagBigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/tag_bigram_dev.csv", index=False)
+        df.to_csv("data/runs/tag_bigram_test.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -109,7 +110,7 @@ class TagBigramDriver:
 if __name__ == "__main__":
     # Example usage
     driver = TagBigramDriver()
-    df = driver.tag_dataset("data/raw/Secs19-21 - development")
+    df = driver.tag_dataset("data/raw/Secs22-24 - testing")
     print(df.head())
     #tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
     #print(tagged_text.head())

@@ -81,7 +81,7 @@ class TagTrigramDriver:
         # print(tags)
         return tags
     
-    def tag_dataset(self, dataset:str, output:str = "data/runs/trigram_dev.csv")-> pd.DataFrame:
+    def tag_dataset(self, dataset:str, output:str = "data/runs/trigram_test.csv")-> pd.DataFrame:
         """
         Atribui tags a um dataset de palavras.
         Retorna um DataFrame com as colunas 'id', 'word', 'real' e 'pred'.
@@ -106,7 +106,7 @@ class TagTrigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("../data/runs/tag_trigram_dev.csv", index=False)
+        df.to_csv("data/runs/tag_trigram_test.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -119,7 +119,7 @@ class TagTrigramDriver:
 if __name__ == "__main__":
     # Example usage
     driver = TagTrigramDriver()
-    df = driver.tag_dataset("../data/raw/Secs19-21 - development")
+    df = driver.tag_dataset("data/raw/Secs22-24 - testing")
     print(df.head())
     #tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
     #print(tagged_text.head())

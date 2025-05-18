@@ -96,7 +96,7 @@ class BigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/bigram_dev.csv", index=False)
+        df.to_csv("data/runs/bigram_test.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -109,7 +109,7 @@ class BigramDriver:
 if __name__ == "__main__":
     # Example usage
     driver = BigramDriver()
-    df = driver.tag_dataset("data/raw/Secs19-21 - development")
+    df = driver.tag_dataset("data/raw/Secs22-24 - testing")
     print(df.head())
     #tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
     #print(tagged_text.head())

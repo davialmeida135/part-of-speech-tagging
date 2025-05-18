@@ -12,10 +12,10 @@ class UnigramDriver:
 
         if data is None:
             self.data_path = os.path.join(self.self_path, "../data/models/unigram.csv")
-
-        self.train_data = pl.read_csv(self.data_path)
         self.unk_word_tag = None
         self.numeric_word_tag = None
+
+        self.fit(self.data_path)
 
     #TODO clean
     def fit(self, data:str):
@@ -122,7 +122,7 @@ class UnigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/unigram_dev.csv", index=False)
+        df.to_csv("data/runs/unigram_test.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -136,5 +136,6 @@ if __name__ == "__main__":
     # Example usage
     driver = UnigramDriver()
     driver.fit("data/models/unigram.csv")
-    tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
+    #print(driver.tag("RTC-owned"))
+    tagged_text = driver.tag_dataset("data/raw/Secs22-24 - testing")
     print(tagged_text.head())
