@@ -17,21 +17,74 @@ A fase de inferência de tags é executada por um módulo de inferência chamado
 
 ## Análise exploratória
 
-As distribuições de tags para as 3 partições do corpus são representadas abaixo
+Descartamos, para esta análise, as tags e os tokens relativos aos seguintes elementos de pontuação:
+`[',', '``', "''", '.', ';', '#', '%', "'", '"', "$", ":", "(", ")"]`
+
+| Dataset | Tokens  | Palavras únicas | Tags únicas |
+|:-------:|:-------:|:---------------:|:-----------:|
+| Train   | 912344  | 42036           | 38          |
+| Dev     | 131768  | 14822           | 38          |
+| Test    | 129654  | 13710           | 38          |
+
+As distribuições de tags para as 3 partições do corpus são apresentadas abaixo:
+
+![Distribuição das tags mais comuns para cada partição](./media/tag_dist.png)
 
 A quantidade de palavras e as 10 palavras mais comuns para cada arquivo são:
 
+![Distribuição das palavras mais comuns para cada partição](./media/word_dist.png)
 
-## Experimentos (incluir confusion matrix)
+## Experimentos
 - Todos os treinamentos foram realizados com o arquivo `Secs0-18 - training` e os testes de desenvolvimento com o arquivo `Secs19-21 - development`.
+
+### Palavra desconhecida
+A modelagem de palavra desconhecida é importante para que o programa possa ser mais generalista e não se limite apenas às palavras no corpus de treino.
+#### Removendo palavras com uma aparição
+Com esse formato, todas as palavras do dataset de treino com apenas uma aparição foram alteradas para *unk-word*, definindo sua tag como a mais comum entre as palavras selecionadas. A tag definida foi NNP, dentre 22173 palavras selecionadas.
+Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes resultados:
+![Confusion matrix](./media/unk-1.png)
+- Accuracy: 0.9056
+- Precision: 0.8168
+- Recall: 0.7792
+- F1-Score: 0.7872
+
+#### Mantendo as palavras com uma aparição
+Aplicando este método, as palavras com uma aparição não são alteradas para *unk-word*, mas suas tags são acumuladas para compor uma nova entrada para a *unk-word*.
+Esse modelo trouxe os seguintes resultados:
+![Confusion matrix](./media/unk-keep.png)
+- Accuracy: 0.9143
+- Precision: 0.8181
+- Recall: 0.7867
+- F1-Score: 0.7922
+
+Essa abordagem resultou em menos palavras sendo classificadas incorretamente como NNP e melhorando as métricas.
+
+### Normalização
+
+#### Modelo 1
+Esse modelo mantém o experimento da seção 3.1.2 e trata palavras com e sem letras maiúsculas como palavras diferentes, por exemplo: mesmo que a palavra "factory" esteja no dataset de treino, caso nos testes seja encontrada a palavra "Factory", ela será modelada como "unk-word".
+![Confusion matrix](./media/unk-keep.png)
+- Accuracy: 0.9143
+- Precision: 0.8181
+- Recall: 0.7867
+- F1-Score: 0.7922
+
+#### Modelo 2
+Esta segunda abordagem, antes de recorrer à palavra desconhecida, busca a palavra equivalente em lowercase e, em seguida, busca a palavra em forma capitalizada. Essa estratégia tem o objetivo de diminuir o número de vezes que recorremos à *unk-word* e melhorar as métricas do programa.
+
+![Confusion matrix](./media/lower.png)
+- Accuracy: 0.9136
+- Precision: 0.8305
+- Recall: 0.7897
+- F1-Score: 0.7954
+
+As métricas mostram um melhor equilíbrio entre as classes e uma maior facilidade em acertar classes menos comuns, mesmo que com erro maior no geral.
+## Teste Final
 - Os resultados finais reportados são de inferências sobre o conjunto `Secs22-24 - testing`
+- Para o unigrama, foi utilizada a abordagem descrita na seção 3.1.2
 
 ### Unigrama
-O dataset gerado pelo extractor de unigrama tem o seguinte formato:
-`|Palavra|Tag Máxima|`
 
-Em que "Tag Máxima" representa qual a tag que foi mais atribuída à palavra no corpus de treinamento. Palavras com aparições iguais ou abaixo de um valor N foram contabilizadas como "unk-word", tendo como sua "Tag Máxima" a tag mais comum atribuída às palavras que satifizeram as condições.
-- Para N = 1, foram obtidos os seguintes resultados: 
 
 ### Bigrama com palavras
 

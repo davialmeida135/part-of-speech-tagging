@@ -69,10 +69,29 @@ class UnigramDriver:
                 tag = match.get_column("max_tag")[0]
                 tagged_word = "{}_{}".format(original_word, tag)
                 tags.append(tagged_word)
-            # Em último caso, atribui a tag da palavra desconhecida
-            else:
-                tagged_word = "{}_{}".format(original_word, self.unk_word_tag)
+                continue
+
+            # Procura a palavra em lowercase
+            match = self.train_data.filter(pl.col("word") == word.lower())
+            if not match.is_empty():
+                tag = match.get_column("max_tag")[0]
+                tagged_word = "{}_{}".format(original_word, tag)
+                print(f"Achei lower {original_word} as {tagged_word}")
                 tags.append(tagged_word)
+                continue
+
+            # Procura a palavra com a primeira letra maiúscula
+            match = self.train_data.filter(pl.col("word") == word.capitalize())
+            if not match.is_empty():
+                tag = match.get_column("max_tag")[0]
+                tagged_word = "{}_{}".format(original_word, tag)
+                print(f"Achei cap {original_word} as {tagged_word}")
+                tags.append(tagged_word)
+                continue
+            
+            # Em último caso, atribui a tag da palavra desconhecida
+            tagged_word = "{}_{}".format(original_word, self.unk_word_tag)
+            tags.append(tagged_word)
 
         return tags
     
@@ -103,7 +122,7 @@ class UnigramDriver:
                 
         # Cria DataFrame
         df = pd.DataFrame(tagged_dataset)
-        df.to_csv("data/runs/unigram_train.csv", index=False)
+        df.to_csv("data/runs/unigram_dev.csv", index=False)
         return df
     
     def remove_tags(self, text):
@@ -117,5 +136,5 @@ if __name__ == "__main__":
     # Example usage
     driver = UnigramDriver()
     driver.fit("data/models/unigram.csv")
-    tagged_text = driver.tag_dataset("data/raw/Secs0-18 - training")
+    tagged_text = driver.tag_dataset("data/raw/Secs19-21 - development")
     print(tagged_text.head())

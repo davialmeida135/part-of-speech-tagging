@@ -26,12 +26,12 @@ df = pl.DataFrame([
 ])
 
 # Transforma todas palavras com count=1 em unk-word
-df = df.with_columns(
-    pl.when(pl.col("count") == 1)
-      .then(pl.lit("unk-word"))
-      .otherwise(pl.col("word"))
-      .alias("word")
-)
+# df = df.with_columns(
+#     pl.when(pl.col("count") == 2)
+#       .then(pl.lit("unk-word"))
+#       .otherwise(pl.col("word"))
+#       .alias("word")
+# )
 
 df = df.sort(["count"], descending=True)
 df = df.pivot(on="tag",index="word",values="count", aggregate_function="sum")
