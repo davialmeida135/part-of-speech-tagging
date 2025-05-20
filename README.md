@@ -30,7 +30,7 @@ As distribuições de tags para as 3 partições do corpus são apresentadas aba
 
 ![Distribuição das tags mais comuns para cada partição](./media/tag_dist.png)
 
-A quantidade de palavras e as 10 palavras mais comuns para cada arquivo são:
+As 10 palavras mais comuns para cada arquivo são:
 
 ![Distribuição das palavras mais comuns para cada partição](./media/word_dist.png)
 
@@ -81,44 +81,41 @@ Esta segunda abordagem, antes de recorrer à palavra desconhecida, busca a palav
 As métricas mostram um melhor equilíbrio entre as classes e uma maior facilidade em acertar classes menos comuns, mesmo que com erro maior no geral.
 ## Teste Final
 - Os resultados finais reportados são de inferências sobre o conjunto `Secs22-24 - testing`
-- Para o unigrama, foi utilizada a abordagem descrita na seção 3.1.2
+- Para o unigrama, foi utilizada a abordagem descrita na seção 6.2.2 para normalização e 6.1.2 para tratamento da palavra desconhecida.
+- Para o smoothing de Bigramas e Trigramas, foi utilizada a técnica de Backoff.
 
 ### Unigrama
 ![Confusion Matrix para Unigrama](./media/unigram_test.png)
-
-Accuracy: 0.9159
-Weighted Precision: 0.8110
-Weighted Recall: 0.7771
-Weighted F1-Score: 0.7786
+- Accuracy: 0.9159
+- Precision: 0.8110
+- Recall: 0.7771
+- F1-Score: 0.7786
 ### Bigrama com palavras
 
 ![Confusion Matrix para Bigrama com palavras](./media/bigram_test.png)
-Accuracy: 0.9357
-Weighted Precision: 0.8572
-Weighted Recall: 0.8327
-Weighted F1-Score: 0.8408
+- Accuracy: 0.9357
+- Precision: 0.8572
+- Recall: 0.8327
+- F1-Score: 0.8408
 
 ### Trigrama com palavras
 ![Confusion Matrix para Trigrama com palavras](./media/trigram_test.png)
 
-Accuracy: 0.9354
-Weighted Precision: 0.8532
-Weighted Recall: 0.8308
-Weighted F1-Score: 0.8383
+- Accuracy: 0.9354
+- Precision: 0.8532
+- Recall: 0.8308
+- F1-Score: 0.8383
 ### Bigrama com tags
 ![Confusion Matrix para Bigrama com tags](./media/bigram_tag.png)
 
-Accuracy: 0.9370
-Weighted Precision: 0.8422
-Weighted Recall: 0.8291
-Weighted F1-Score: 0.8309
+- Accuracy: 0.9370
+- Precision: 0.8422
+- Recall: 0.8291
+- F1-Score: 0.8309
 ### Trigrama com tags
 ![Confusion Matrix para Trigrama com tags](./media/trigram_tag.png)
 
-Accuracy: 0.9367
-Weighted Precision: 0.8435
-Weighted Recall: 0.8262
-Weighted F1-Score: 0.8308
-### Métrica própria?
-% de cada tag
-Pode ser baseado nas tags das palavras anteriores ou na tag posterior das palavras anteriores
+- Accuracy: 0.9367
+- Precision: 0.8435
+- Recall: 0.8262
+- F1-Score: 0.8308
