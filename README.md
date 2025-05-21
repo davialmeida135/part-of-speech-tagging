@@ -10,14 +10,15 @@ Os experimentos foram realizados com mais de uma técnica de treinamento e infer
 O [corpus utilizado](https://drive.google.com/drive/folders/19_F8mmI65lWnL6BmKvtzMX2Z_tcNlXxb) é composto por textos tratados do [Penn Treebank](https://paperswithcode.com/dataset/penn-treebank), com anotações no formato PALAVRA_TAG.
 
 ## 3. O treinamento
-A "fase de treinamento", nesse contexto, é composta pela geração de um dataset que agregue informações específicas sobre cada palavra ou série de palavras no corpus. Esses datasets são gerados pelos programas na pasta `extractors`, sendo todos baseados nas seções `Secs0-18 - training` do Penn Treebank.
+A "fase de treinamento", nesse contexto, é composta pela geração de um dataset que agrega informações específicas sobre cada palavra ou série de palavras no corpus. Esses datasets são gerados pelos programas na pasta `extractors`, sendo todos baseados nas seções `Secs0-18 - training` do Penn Treebank.
+O dataset gerado pelo treinamento do modelo de trigrama, por exemplo, tem o formato `|Penultima Palavra|Última Palavra|Palavra|Tag|`.
 
 ## 4. A inferência
 A fase de inferência de tags é executada por um módulo de inferência chamado *driver*. O driver utiliza o dataset gerado na fase de treinamento e os conjuntos de desenvolvimento e teste do corpus para predizer a qual tag cada palavra pertence. Ao fim da fase de inferência, é gerado um dataset com as colunas `|Palavra|Tag Real|Tag Inferida|` para facilitar a análise futura dos resultados obtidos.
 
 ## 5. Análise exploratória
 
-Descartamos, para esta análise, as tags e os tokens relativos aos seguintes elementos de pontuação:
+Descartamos, para esta e futuras análises, as tags e os tokens relativos aos seguintes elementos de pontuação:
 `[',', '``', "''", '.', ';', '#', '%', "'", '"', "$", ":", "(", ")"]`
 
 | Dataset | Tokens  | Palavras únicas | Tags únicas |
@@ -34,7 +35,7 @@ As 10 palavras mais comuns para cada arquivo são:
 
 ![Distribuição das palavras mais comuns para cada partição](./media/word_dist.png)
 
-## 6 .Experimentos
+## 6. Experimentos
 - Todos os treinamentos foram realizados com o arquivo `Secs0-18 - training` e os testes de desenvolvimento com o arquivo `Secs19-21 - development`.
 - Todos os experimentos foram realizados com o modelo de unigrama
 ### 6.1 Palavra desconhecida
@@ -119,3 +120,12 @@ As métricas mostram um melhor equilíbrio entre as classes e uma maior facilida
 - Precision: 0.8435
 - Recall: 0.8262
 - F1-Score: 0.8308
+
+## Conclusão
+
+Após análise dos resultados, foi possível concluir que os métodos de Bigrama e Trigrama baseados em palavras foram os que apresentaram as melhores métricas. Apesar dos bons resultados, foram observados algums pontos de erro comuns a todos os métodos, sendo os principais:
+
+- Marcadores de Lista denominados como Números Cardinais (LS ==> CD), uma vez que os dois são representados por valores numéricos.
+- Pre Determiners marcados como Determiners (PDT ==> DT)
+- Palavras estrangeiras marcadas como nome próprio (FW ==> NNP), já que o marcador de palavra desconhecida ficou definido como nome próprio.
+- Nomes próprios no plural marcados como nome próprio no singular (NNPS ==> NNP), já que o marcador de palavra desconhecida ficou definido como nome próprio no singular.

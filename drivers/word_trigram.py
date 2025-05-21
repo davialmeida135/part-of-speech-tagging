@@ -32,7 +32,7 @@ class TrigramDriver:
 
     def tag(self, text:str)-> list[str]:
         """
-        Tags the input text with the specified tag.
+        Gera tags para o texto fornecido.
         """
 
         text = "BOS BOS " + text
