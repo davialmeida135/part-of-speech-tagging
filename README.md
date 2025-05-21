@@ -1,6 +1,5 @@
 # part-of-speech-tagging
 Trabalho da disciplina de processamento de linguagem natural, UFRN 2025.1
-https://hmoodle.imd.ufrn.br/moodlep/mod/assign/view.php?id=2970
 
 ## 1. O objetivo
 O objetivo do trabalho é implementar um part of speech tagger, ou seja, um programa que classifique as palavras em uma frase de acordo com sua classe gramatical (substantivo, adjetivo etc.). 
@@ -86,12 +85,17 @@ As métricas mostram um melhor equilíbrio entre as classes e uma maior facilida
 - Para o smoothing de Bigramas e Trigramas, foi utilizada a técnica de Backoff.
 
 ### Unigrama
+
+Esse modelo leva em conta apenas a tag mais comum para cada palavra no dataset de treino.
+
 ![Confusion Matrix para Unigrama](./media/unigram_test.png)
 - Accuracy: 0.9159
 - Precision: 0.8110
 - Recall: 0.7771
 - F1-Score: 0.7786
 ### Bigrama com palavras
+
+Esse modelo é baseado na tag mais comum para a segunda palavra de cada tupla (palavra1, palavra2)
 
 ![Confusion Matrix para Bigrama com palavras](./media/bigram_test.png)
 - Accuracy: 0.9357
@@ -100,22 +104,28 @@ As métricas mostram um melhor equilíbrio entre as classes e uma maior facilida
 - F1-Score: 0.8408
 
 ### Trigrama com palavras
-![Confusion Matrix para Trigrama com palavras](./media/trigram_test.png)
 
+Esse modelo é baseado na tag mais comum para a terceira palavra de cada tupla (palavra1, palavra2, palavra3)
+
+![Confusion Matrix para Trigrama com palavras](./media/trigram_test.png)
 - Accuracy: 0.9354
 - Precision: 0.8532
 - Recall: 0.8308
 - F1-Score: 0.8383
 ### Bigrama com tags
-![Confusion Matrix para Bigrama com tags](./media/bigram_tag.png)
 
+Esse modelo é baseado na tag mais comum para a segunda palavra baseado na tag da palavra anterior e na palavra atual. (tag_anterior, palavra)
+
+![Confusion Matrix para Bigrama com tags](./media/bigram_tag.png)
 - Accuracy: 0.9370
 - Precision: 0.8422
 - Recall: 0.8291
 - F1-Score: 0.8309
 ### Trigrama com tags
-![Confusion Matrix para Trigrama com tags](./media/trigram_tag.png)
 
+Esse modelo é baseado na tag mais comum para a terceira palavra baseado nas tags das palavras anteriores e na palavra atual. (tag_anterior1, tag_anterior2, palavra)
+
+![Confusion Matrix para Trigrama com tags](./media/trigram_tag.png)
 - Accuracy: 0.9367
 - Precision: 0.8435
 - Recall: 0.8262

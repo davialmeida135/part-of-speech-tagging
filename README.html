@@ -1,0 +1,194 @@
+<!DOCTYPE html><html><head>
+      <title>README</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\Davi\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.18\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="part-of-speech-tagging">part-of-speech-tagging </h1>
+<p>Trabalho da disciplina de processamento de linguagem natural, UFRN 2025.1</p>
+<h2 id="1-o-objetivo">1. O objetivo </h2>
+<p>O objetivo do trabalho é implementar um part of speech tagger, ou seja, um programa que classifique as palavras em uma frase de acordo com sua classe gramatical (substantivo, adjetivo etc.).<br>
+Os experimentos foram realizados com mais de uma técnica de treinamento e inferência, como o uso de unigramas, bigramas, trigramas e o condicionamento por tag no lugar de por palavra.</p>
+<h2 id="2-os-dados">2. Os dados </h2>
+<p>O <a href="https://drive.google.com/drive/folders/19_F8mmI65lWnL6BmKvtzMX2Z_tcNlXxb">corpus utilizado</a> é composto por textos tratados do <a href="https://paperswithcode.com/dataset/penn-treebank">Penn Treebank</a>, com anotações no formato PALAVRA_TAG.</p>
+<h2 id="3-o-treinamento">3. O treinamento </h2>
+<p>A "fase de treinamento", nesse contexto, é composta pela geração de um dataset que agrega informações específicas sobre cada palavra ou série de palavras no corpus. Esses datasets são gerados pelos programas na pasta <code>extractors</code>, sendo todos baseados nas seções <code>Secs0-18 - training</code> do Penn Treebank.<br>
+O dataset gerado pelo treinamento do modelo de trigrama, por exemplo, tem o formato <code>|Penultima Palavra|Última Palavra|Palavra|Tag|</code>.</p>
+<h2 id="4-a-inferência">4. A inferência </h2>
+<p>A fase de inferência de tags é executada por um módulo de inferência chamado <em>driver</em>. O driver utiliza o dataset gerado na fase de treinamento e os conjuntos de desenvolvimento e teste do corpus para predizer a qual tag cada palavra pertence. Ao fim da fase de inferência, é gerado um dataset com as colunas <code>|Palavra|Tag Real|Tag Inferida|</code> para facilitar a análise futura dos resultados obtidos.</p>
+<h2 id="5-análise-exploratória">5. Análise exploratória </h2>
+<p>Descartamos, para esta e futuras análises, as tags e os tokens relativos aos seguintes elementos de pontuação:<br>
+<code>[',', '``', "''", '.', ';', '#', '%', "'", '"', "$", ":", "(", ")"]</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Dataset</th>
+<th style="text-align:center">Tokens</th>
+<th style="text-align:center">Palavras únicas</th>
+<th style="text-align:center">Tags únicas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Train</td>
+<td style="text-align:center">912344</td>
+<td style="text-align:center">42036</td>
+<td style="text-align:center">38</td>
+</tr>
+<tr>
+<td style="text-align:center">Dev</td>
+<td style="text-align:center">131768</td>
+<td style="text-align:center">14822</td>
+<td style="text-align:center">38</td>
+</tr>
+<tr>
+<td style="text-align:center">Test</td>
+<td style="text-align:center">129654</td>
+<td style="text-align:center">13710</td>
+<td style="text-align:center">38</td>
+</tr>
+</tbody>
+</table>
+<p>As distribuições de tags para as 3 partições do corpus são apresentadas abaixo:</p>
+<p><img src="./media/tag_dist.png" alt="Distribuição das tags mais comuns para cada partição"></p>
+<p>As 10 palavras mais comuns para cada arquivo são:</p>
+<p><img src="./media/word_dist.png" alt="Distribuição das palavras mais comuns para cada partição"></p>
+<h2 id="6-experimentos">6. Experimentos </h2>
+<ul>
+<li>Todos os treinamentos foram realizados com o arquivo <code>Secs0-18 - training</code> e os testes de desenvolvimento com o arquivo <code>Secs19-21 - development</code>.</li>
+<li>Todos os experimentos foram realizados com o modelo de unigrama</li>
+</ul>
+<h3 id="61-palavra-desconhecida">6.1 Palavra desconhecida </h3>
+<p>A modelagem de palavra desconhecida é importante para que o programa possa ser mais generalista e não se limite apenas às palavras no corpus de treino.</p>
+<h4 id="611-removendo-palavras-com-uma-aparição">6.1.1 Removendo palavras com uma aparição </h4>
+<p>Com esse formato, todas as palavras do dataset de treino com apenas uma aparição foram alteradas para <em>unk-word</em>, definindo sua tag como a mais comum entre as palavras selecionadas. A tag definida foi NNP, dentre 22173 palavras selecionadas.<br>
+Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes resultados:<br>
+<img src="./media/unk-1.png" alt="Confusion matrix"></p>
+<ul>
+<li>Accuracy: 0.9056</li>
+<li>Precision: 0.8168</li>
+<li>Recall: 0.7792</li>
+<li>F1-Score: 0.7872</li>
+</ul>
+<h4 id="612-mantendo-as-palavras-com-uma-aparição">6.1.2 Mantendo as palavras com uma aparição </h4>
+<p>Aplicando este método, as palavras com uma aparição não são alteradas para <em>unk-word</em>, mas suas tags são acumuladas para compor uma nova entrada para a <em>unk-word</em>.<br>
+Esse modelo trouxe os seguintes resultados:<br>
+<img src="./media/unk-keep.png" alt="Confusion matrix"></p>
+<ul>
+<li>Accuracy: 0.9143</li>
+<li>Precision: 0.8181</li>
+<li>Recall: 0.7867</li>
+<li>F1-Score: 0.7922</li>
+</ul>
+<p>Essa abordagem resultou em menos palavras sendo classificadas incorretamente como NNP e melhorando as métricas.</p>
+<h3 id="62-normalização">6.2 Normalização </h3>
+<h4 id="621-modelo-1">6.2.1 Modelo 1 </h4>
+<p>Esse modelo mantém o experimento da seção 6.1.2 e trata palavras com e sem letras maiúsculas como palavras diferentes, por exemplo: mesmo que a palavra "factory" esteja no dataset de treino, caso nos testes seja encontrada a palavra "Factory", ela será modelada como "unk-word".<br>
+<img src="./media/unk-keep.png" alt="Confusion matrix"></p>
+<ul>
+<li>Accuracy: 0.9143</li>
+<li>Precision: 0.8181</li>
+<li>Recall: 0.7867</li>
+<li>F1-Score: 0.7922</li>
+</ul>
+<h4 id="622-modelo-2">6.2.2 Modelo 2 </h4>
+<p>Esta segunda abordagem, antes de recorrer à palavra desconhecida, busca a palavra equivalente em lowercase e, em seguida, busca a palavra em forma capitalizada. Essa estratégia tem o objetivo de diminuir o número de vezes que recorremos à <em>unk-word</em> e melhorar as métricas do programa.</p>
+<p><img src="./media/lower.png" alt="Confusion matrix"></p>
+<ul>
+<li>Accuracy: 0.9136</li>
+<li>Precision: 0.8305</li>
+<li>Recall: 0.7897</li>
+<li>F1-Score: 0.7954</li>
+</ul>
+<p>As métricas mostram um melhor equilíbrio entre as classes e uma maior facilidade em acertar classes menos comuns, mesmo que com erro maior no geral.</p>
+<h2 id="teste-final">Teste Final </h2>
+<ul>
+<li>Os resultados finais reportados são de inferências sobre o conjunto <code>Secs22-24 - testing</code></li>
+<li>Para o unigrama, foi utilizada a abordagem descrita na seção 6.2.2 para normalização e 6.1.2 para tratamento da palavra desconhecida.</li>
+<li>Para o smoothing de Bigramas e Trigramas, foi utilizada a técnica de Backoff.</li>
+</ul>
+<h3 id="unigrama">Unigrama </h3>
+<p>Esse modelo leva em conta apenas a tag mais comum para cada palavra no dataset de treino.</p>
+<p><img src="./media/unigram_test.png" alt="Confusion Matrix para Unigrama"></p>
+<ul>
+<li>Accuracy: 0.9159</li>
+<li>Precision: 0.8110</li>
+<li>Recall: 0.7771</li>
+<li>F1-Score: 0.7786</li>
+</ul>
+<h3 id="bigrama-com-palavras">Bigrama com palavras </h3>
+<p>Esse modelo é baseado na tag mais comum para a segunda palavra de cada tupla (palavra1, palavra2)</p>
+<p><img src="./media/bigram_test.png" alt="Confusion Matrix para Bigrama com palavras"></p>
+<ul>
+<li>Accuracy: 0.9357</li>
+<li>Precision: 0.8572</li>
+<li>Recall: 0.8327</li>
+<li>F1-Score: 0.8408</li>
+</ul>
+<h3 id="trigrama-com-palavras">Trigrama com palavras </h3>
+<p>Esse modelo é baseado na tag mais comum para a terceira palavra de cada tupla (palavra1, palavra2, palavra3)</p>
+<p><img src="./media/trigram_test.png" alt="Confusion Matrix para Trigrama com palavras"></p>
+<ul>
+<li>Accuracy: 0.9354</li>
+<li>Precision: 0.8532</li>
+<li>Recall: 0.8308</li>
+<li>F1-Score: 0.8383</li>
+</ul>
+<h3 id="bigrama-com-tags">Bigrama com tags </h3>
+<p>Esse modelo é baseado na tag mais comum para a segunda palavra baseado na tag da palavra anterior e na palavra atual. (tag_anterior, palavra)</p>
+<p><img src="./media/bigram_tag.png" alt="Confusion Matrix para Bigrama com tags"></p>
+<ul>
+<li>Accuracy: 0.9370</li>
+<li>Precision: 0.8422</li>
+<li>Recall: 0.8291</li>
+<li>F1-Score: 0.8309</li>
+</ul>
+<h3 id="trigrama-com-tags">Trigrama com tags </h3>
+<p>Esse modelo é baseado na tag mais comum para a terceira palavra baseado nas tags das palavras anteriores e na palavra atual. (tag_anterior1, tag_anterior2, palavra)</p>
+<p><img src="./media/trigram_tag.png" alt="Confusion Matrix para Trigrama com tags"></p>
+<ul>
+<li>Accuracy: 0.9367</li>
+<li>Precision: 0.8435</li>
+<li>Recall: 0.8262</li>
+<li>F1-Score: 0.8308</li>
+</ul>
+<h2 id="conclusão">Conclusão </h2>
+<p>Após análise dos resultados, foi possível concluir que os métodos de Bigrama e Trigrama baseados em palavras foram os que apresentaram as melhores métricas. Apesar dos bons resultados, foram observados algums pontos de erro comuns a todos os métodos, sendo os principais:</p>
+<ul>
+<li>Marcadores de Lista denominados como Números Cardinais (LS ==&gt; CD), uma vez que os dois são representados por valores numéricos.</li>
+<li>Pre Determiners marcados como Determiners (PDT ==&gt; DT)</li>
+<li>Palavras estrangeiras marcadas como nome próprio (FW ==&gt; NNP), já que o marcador de palavra desconhecida ficou definido como nome próprio.</li>
+<li>Nomes próprios no plural marcados como nome próprio no singular (NNPS ==&gt; NNP), já que o marcador de palavra desconhecida ficou definido como nome próprio no singular.</li>
+</ul>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
