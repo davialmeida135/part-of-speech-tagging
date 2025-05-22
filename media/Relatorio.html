@@ -84,7 +84,8 @@ O dataset gerado pelo treinamento do modelo de trigrama, por exemplo, tem o form
 <p>A modelagem de palavra desconhecida é importante para que o programa possa ser mais generalista e não se limite apenas às palavras no corpus de treino.</p>
 <h4 id="611-removendo-palavras-com-uma-aparição">6.1.1 Removendo palavras com uma aparição </h4>
 <p>Com esse formato, todas as palavras do dataset de treino com apenas uma aparição foram alteradas para <em>unk-word</em>, definindo sua tag como a mais comum entre as palavras selecionadas. A tag definida foi NNP, dentre 22173 palavras selecionadas.<br>
-Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes resultados:</p>
+Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes resultados:<br>
+<img src="./media/unk-1.png" alt="Confusion matrix"></p>
 <ul>
 <li>Accuracy: 0.9056</li>
 <li>Precision: 0.8168</li>
@@ -93,7 +94,8 @@ Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes
 </ul>
 <h4 id="612-mantendo-as-palavras-com-uma-aparição">6.1.2 Mantendo as palavras com uma aparição </h4>
 <p>Aplicando este método, as palavras com uma aparição não são alteradas para <em>unk-word</em>, mas suas tags são acumuladas para compor uma nova entrada para a <em>unk-word</em>.<br>
-Esse modelo trouxe os seguintes resultados:</p>
+Esse modelo trouxe os seguintes resultados:<br>
+<img src="./media/unk-keep.png" alt="Confusion matrix"></p>
 <ul>
 <li>Accuracy: 0.9143</li>
 <li>Precision: 0.8181</li>
@@ -103,7 +105,8 @@ Esse modelo trouxe os seguintes resultados:</p>
 <p>Essa abordagem resultou em menos palavras sendo classificadas incorretamente como NNP e melhorando as métricas.</p>
 <h3 id="62-normalização">6.2 Normalização </h3>
 <h4 id="621-modelo-1">6.2.1 Modelo 1 </h4>
-<p>Esse modelo mantém o experimento da seção 6.1.2 e trata palavras com e sem letras maiúsculas como palavras diferentes, por exemplo: mesmo que a palavra "factory" esteja no dataset de treino, caso nos testes seja encontrada a palavra "Factory", ela será modelada como "unk-word".</p>
+<p>Esse modelo mantém o experimento da seção 6.1.2 e trata palavras com e sem letras maiúsculas como palavras diferentes, por exemplo: mesmo que a palavra "factory" esteja no dataset de treino, caso nos testes seja encontrada a palavra "Factory", ela será modelada como "unk-word".<br>
+<img src="./media/unk-keep.png" alt="Confusion matrix"></p>
 <ul>
 <li>Accuracy: 0.9143</li>
 <li>Precision: 0.8181</li>
@@ -112,6 +115,7 @@ Esse modelo trouxe os seguintes resultados:</p>
 </ul>
 <h4 id="622-modelo-2">6.2.2 Modelo 2 </h4>
 <p>Esta segunda abordagem, antes de recorrer à palavra desconhecida, busca a palavra equivalente em lowercase e, em seguida, busca a palavra em forma capitalizada. Essa estratégia tem o objetivo de diminuir o número de vezes que recorremos à <em>unk-word</em> e melhorar as métricas do programa.</p>
+<p><img src="./media/lower.png" alt="Confusion matrix"></p>
 <ul>
 <li>Accuracy: 0.9136</li>
 <li>Precision: 0.8305</li>

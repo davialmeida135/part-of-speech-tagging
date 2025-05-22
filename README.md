@@ -1,6 +1,10 @@
 # part-of-speech-tagging
 Trabalho da disciplina de processamento de linguagem natural, UFRN 2025.1
 
+Aluno: Davi Diógenes Ferreira de Almeida
+
+[Repositório GitHub](https://github.com/davialmeida135/part-of-speech-tagging.git)
+
 ## 1. O objetivo
 O objetivo do trabalho é implementar um part of speech tagger, ou seja, um programa que classifique as palavras em uma frase de acordo com sua classe gramatical (substantivo, adjetivo etc.). 
 Os experimentos foram realizados com mais de uma técnica de treinamento e inferência, como o uso de unigramas, bigramas, trigramas e o condicionamento por tag no lugar de por palavra. 
@@ -42,7 +46,7 @@ A modelagem de palavra desconhecida é importante para que o programa possa ser 
 #### 6.1.1 Removendo palavras com uma aparição
 Com esse formato, todas as palavras do dataset de treino com apenas uma aparição foram alteradas para *unk-word*, definindo sua tag como a mais comum entre as palavras selecionadas. A tag definida foi NNP, dentre 22173 palavras selecionadas.
 Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes resultados:
-![Confusion matrix](./media/unk-1.png)
+
 - Accuracy: 0.9056
 - Precision: 0.8168
 - Recall: 0.7792
@@ -51,7 +55,6 @@ Utilizando este modelo no dataset de desenvolvimento, foram obtidos os seguintes
 #### 6.1.2 Mantendo as palavras com uma aparição
 Aplicando este método, as palavras com uma aparição não são alteradas para *unk-word*, mas suas tags são acumuladas para compor uma nova entrada para a *unk-word*.
 Esse modelo trouxe os seguintes resultados:
-![Confusion matrix](./media/unk-keep.png)
 - Accuracy: 0.9143
 - Precision: 0.8181
 - Recall: 0.7867
@@ -63,7 +66,6 @@ Essa abordagem resultou em menos palavras sendo classificadas incorretamente com
 
 #### 6.2.1 Modelo 1
 Esse modelo mantém o experimento da seção 6.1.2 e trata palavras com e sem letras maiúsculas como palavras diferentes, por exemplo: mesmo que a palavra "factory" esteja no dataset de treino, caso nos testes seja encontrada a palavra "Factory", ela será modelada como "unk-word".
-![Confusion matrix](./media/unk-keep.png)
 - Accuracy: 0.9143
 - Precision: 0.8181
 - Recall: 0.7867
@@ -72,7 +74,6 @@ Esse modelo mantém o experimento da seção 6.1.2 e trata palavras com e sem le
 #### 6.2.2 Modelo 2
 Esta segunda abordagem, antes de recorrer à palavra desconhecida, busca a palavra equivalente em lowercase e, em seguida, busca a palavra em forma capitalizada. Essa estratégia tem o objetivo de diminuir o número de vezes que recorremos à *unk-word* e melhorar as métricas do programa.
 
-![Confusion matrix](./media/lower.png)
 - Accuracy: 0.9136
 - Precision: 0.8305
 - Recall: 0.7897
