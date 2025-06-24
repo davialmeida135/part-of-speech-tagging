@@ -7,10 +7,26 @@ from preprocessing import POSDataPreprocessor
 import pandas as pd
 from rnn_model import RNNModel
 import os
+from engine import POSTagger
 
-def configure_gpu():
+def configure_gpu(try_gpu=True):
     """Configure GPU settings for TensorFlow"""
     print("Configuring GPU...")
+    
+    if not try_gpu:
+        """Configure GPU settings for TensorFlow"""
+        print("Configuring for CPU training...")
+        
+        # Force CPU usage by setting CUDA_VISIBLE_DEVICES to empty
+        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+        
+        # Disable GPU devices
+        tf.config.set_visible_devices([], 'GPU')
+        
+        print("GPU disabled - using CPU for training")
+        print(f"TensorFlow version: {tf.__version__}")
+        
+        return False
     
     # Check if GPU is available
     gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -19,6 +35,11 @@ def configure_gpu():
             # Enable memory growth to avoid allocating all GPU memory at once
             for gpu in gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
+            
+            # Enable mixed precision for faster training
+            policy = tf.keras.mixed_precision.Policy('mixed_float16')
+            tf.keras.mixed_precision.set_global_policy(policy)
+            print("Mixed precision enabled")
             
             print(f"GPU(s) found and configured: {len(gpus)} device(s)")
             for i, gpu in enumerate(gpus):
@@ -37,69 +58,6 @@ def configure_gpu():
     print(f"Built with CUDA: {tf.test.is_built_with_cuda()}")
     
     return len(gpus) > 0
-
-class POSTagger:
-    def __init__(self, model=None, preprocessor=None):
-        self.model = model
-        self.preprocessor = preprocessor
-    
-    def train(self, train_X, train_y, dev_X, dev_y, epochs=10, batch_size=32):
-        """Train the model"""
-        if self.model is None:
-            raise ValueError("Model not built yet!")
-        
-        # Create callbacks
-        callbacks = [
-            keras.callbacks.EarlyStopping(
-                monitor='val_loss',
-                patience=3,
-                restore_best_weights=True
-            ),
-            keras.callbacks.ReduceLROnPlateau(
-                monitor='val_loss',
-                factor=0.5,
-                patience=2,
-                min_lr=1e-6
-            )
-        ]
-        
-        # Train model
-        history = self.model.fit(
-            train_X, train_y,
-            validation_data=(dev_X, dev_y),
-            epochs=epochs,
-            batch_size=batch_size,
-            callbacks=callbacks,
-            verbose=1
-        )
-        
-        return history
-    
-    def predict(self, X):
-        """Make predictions"""
-        if self.model is None:
-            raise ValueError("Model not trained yet!")
-        
-        predictions = self.model.predict(X)
-        return np.argmax(predictions, axis=-1)
-    
-    def evaluate(self, X, y):
-        """Evaluate model"""
-        if self.model is None:
-            raise ValueError("Model not trained yet!")
-        
-        return self.model.evaluate(X, y, verbose=0)
-    
-    def save_model(self, path):
-        """Save the trained model"""
-        if self.model is None:
-            raise ValueError("No model to save!")
-        
-        self.model.save(path)
-    
-    def load_model(self, path):
-        """Load a trained model"""
-        self.model = keras.models.load_model(path)
 
 def create_result_dataset(predictions, true_labels, sequences, preprocessor, output_path):
     """Create dataset in the same format as your probabilistic models"""
@@ -131,7 +89,7 @@ def create_result_dataset(predictions, true_labels, sequences, preprocessor, out
 
 def main():
     """Main training and evaluation script"""
-    gpu_available = configure_gpu()
+    #gpu_available = configure_gpu(True)
     
     # Set paths relative to project root
     base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -179,7 +137,7 @@ def main():
         train_X, train_y,
         dev_X, dev_y,
         epochs=15,
-        batch_size=32 if gpu_available else 16  # Smaller batch size for CPU
+        batch_size=256
     )
     
     # Evaluate on test set (using the actual test set, not dev)

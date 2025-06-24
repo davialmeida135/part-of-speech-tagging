@@ -25,7 +25,7 @@ class RNNModel:
                     layers.Embedding(
                         input_dim=self.vocab_size,
                         output_dim=self.embedding_dim,
-                        mask_zero=True,  # Ignore padding tokens
+                        mask_zero=False, 
                         name='embedding'
                     ),
                     

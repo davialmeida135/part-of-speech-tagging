@@ -16,7 +16,7 @@ class POSDataPreprocessor:
         word_counts = Counter()
         tag_counts = Counter()
         
-        # Conta as frequências de palavras e tags
+        # Count word and tag frequencies
         with open(data_path, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
@@ -39,6 +39,12 @@ class POSDataPreprocessor:
                     word_counts[word] += 1
                     tag_counts[tag] += 1
         
+        # Initialize vocabularies properly
+        self.word2idx = {'<PAD>': 0, '<UNK>': 1}
+        self.idx2word = {0: '<PAD>', 1: '<UNK>'}
+        self.tag2idx = {'<PAD>': 0}
+        self.idx2tag = {0: '<PAD>'}
+        
         # Build word vocabulary (keep words with freq > 1, others become <UNK>)
         word_idx = 2  # Start after <PAD> and <UNK>
         for word, count in word_counts.items():
@@ -56,18 +62,10 @@ class POSDataPreprocessor:
             
         print(f"Vocabulary size: {len(self.word2idx)}")
         print(f"Tag set size: {len(self.tag2idx)}")
-
-        # Create vocabulary CSV for inspection
-        vocab_df = pd.DataFrame([
-            {'type': 'word', 'token': word, 'index': idx, 'frequency': word_counts.get(word, 0)}
-            for word, idx in self.word2idx.items()
-        ] + [
-            {'type': 'tag', 'token': tag, 'index': idx, 'frequency': tag_counts.get(tag, 0)}
-            for tag, idx in self.tag2idx.items()
-        ])
-
-        vocab_df.to_csv('neural_nets/vocabulary/vocabulary.csv', index=False)
-        print("Saved vocabulary to neural_nets/vocabulary/vocabulary.csv")
+        
+        # Debug: print the actual max indices
+        print(f"Max word index: {max(self.word2idx.values()) if self.word2idx else 0}")
+        print(f"Max tag index: {max(self.tag2idx.values()) if self.tag2idx else 0}")
         
     def text_to_sequences(self, data_path):
         """Convert text to sequences of indices"""
@@ -96,9 +94,18 @@ class POSDataPreprocessor:
                     except Exception:
                         pass
                     
-                    # Convert to indices
+                    # Convert to indices - fix the indexing issue
                     word_idx = self.word2idx.get(word, self.word2idx['<UNK>'])
                     tag_idx = self.tag2idx.get(tag, 0)  # Should not happen with training data
+                    
+                    # Add bounds checking to prevent out-of-range indices
+                    if word_idx >= len(self.word2idx):
+                        print(f"Warning: word_idx {word_idx} >= vocab_size {len(self.word2idx)}, using <UNK>")
+                        word_idx = self.word2idx['<UNK>']
+                    
+                    if tag_idx >= len(self.tag2idx):
+                        print(f"Warning: tag_idx {tag_idx} >= tag_size {len(self.tag2idx)}, using <PAD>")
+                        tag_idx = 0
                     
                     word_seq.append(word_idx)
                     tag_seq.append(tag_idx)
