@@ -1,63 +1,42 @@
-import tensorflow as tf
-from keras import layers
+import torch
 import numpy as np
-import pickle
-import keras
-from preprocessing import POSDataPreprocessor
 import pandas as pd
-from rnn_model import RNNModel
 import os
-from engine import POSTagger
+from preprocessing import POSDataPreprocessor
+from torch_rnn import RNNModel
+from torch_engine import POSTagger
 
 def configure_gpu(try_gpu=True):
-    """Configure GPU settings for TensorFlow"""
+    """Configure GPU settings for PyTorch"""
     print("Configuring GPU...")
     
     if not try_gpu:
-        """Configure GPU settings for TensorFlow"""
         print("Configuring for CPU training...")
-        
-        # Force CPU usage by setting CUDA_VISIBLE_DEVICES to empty
-        os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-        
-        # Disable GPU devices
-        tf.config.set_visible_devices([], 'GPU')
-        
+        device = torch.device('cpu')
         print("GPU disabled - using CPU for training")
-        print(f"TensorFlow version: {tf.__version__}")
-        
-        return False
+        return device, False
     
-    # Check if GPU is available
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    if gpus:
-        try:
-            # Enable memory growth to avoid allocating all GPU memory at once
-            for gpu in gpus:
-                tf.config.experimental.set_memory_growth(gpu, True)
-            
-            # Enable mixed precision for faster training
-            policy = tf.keras.mixed_precision.Policy('mixed_float16')
-            tf.keras.mixed_precision.set_global_policy(policy)
-            print("Mixed precision enabled")
-            
-            print(f"GPU(s) found and configured: {len(gpus)} device(s)")
-            for i, gpu in enumerate(gpus):
-                print(f"  GPU {i}: {gpu}")
-            
-        except RuntimeError as e:
-            print(f"GPU configuration error: {e}")
+    # Check if CUDA is available
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+        gpu_count = torch.cuda.device_count()
+        gpu_name = torch.cuda.get_device_name(0)
+        
+        print(f"GPU(s) found and configured: {gpu_count} device(s)")
+        print(f"  GPU 0: {gpu_name}")
+        print(f"  CUDA Version: {torch.version.cuda}")
+        
+        # Set memory allocation strategy
+        torch.backends.cudnn.benchmark = True  # Optimize for consistent input sizes
+        
+        return device, True
     else:
         print("No GPU found. Training will use CPU.")
         print("To enable GPU support:")
         print("  1. Install CUDA toolkit")
-        print("  2. pip install tensorflow[and-cuda]==2.19.0")
-    
-    # Print TensorFlow build info for debugging
-    print(f"TensorFlow version: {tf.__version__}")
-    print(f"Built with CUDA: {tf.test.is_built_with_cuda()}")
-    
-    return len(gpus) > 0
+        print("  2. pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118")
+        device = torch.device('cpu')
+        return device, False
 
 def create_result_dataset(predictions, true_labels, sequences, preprocessor, output_path):
     """Create dataset in the same format as your probabilistic models"""
@@ -89,7 +68,7 @@ def create_result_dataset(predictions, true_labels, sequences, preprocessor, out
 
 def main():
     """Main training and evaluation script"""
-    gpu_available = configure_gpu(True)
+    device, gpu_available = configure_gpu(True)
     
     # Set paths relative to project root
     base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -121,34 +100,40 @@ def main():
         vocab_size=vocab_size,
         tag_size=tag_size,
         embedding_dim=100,
-        hidden_dim=128
+        hidden_dim=128,
+        num_layers=2,
+        dropout=0.3
     )
     
     tagger = POSTagger(
-        model=model.build_model(),
-        preprocessor=preprocessor
+        model=model,
+        preprocessor=preprocessor,
+        device=device
     )
     
     print("Model summary:")
-    tagger.model.summary()
+    print(f"Model parameters: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"Trainable parameters: {sum(p.numel() for p in model.parameters() if p.requires_grad):,}")
     
     print("Training model...")
     history = tagger.train(
         train_X, train_y,
         dev_X, dev_y,
         epochs=15,
-        batch_size=256
+        batch_size=256 if gpu_available else 32,  # Larger batch size for GPU
+        learning_rate=0.001,
+        patience=3
     )
     
-    # Evaluate on test set (using the actual test set, not dev)
+    # Evaluate on test set
     print("Evaluating on test set...")
-    test_loss, test_accuracy = tagger.evaluate(test_X, test_y)
+    test_loss, test_accuracy = tagger.evaluate(test_X, test_y, batch_size=256 if gpu_available else 32)
     print(f"Test Loss: {test_loss:.4f}")
     print(f"Test Accuracy: {test_accuracy:.4f}")
     
     # Make predictions and create run dataset
     print("Creating predictions...")
-    test_predictions = tagger.predict(test_X)
+    test_predictions = tagger.predict(test_X, batch_size=256 if gpu_available else 32)
     
     # Create run dataset compatible with your analysis notebooks
     output_path = os.path.join(base_path, 'data', 'runs', 'rnn_test.csv')
@@ -160,7 +145,7 @@ def main():
     print("RNN training and evaluation complete!")
     
     # Save model
-    model_path = os.path.join(base_path, 'data', 'models', 'rnn_pos_model')
+    model_path = os.path.join(base_path, 'data', 'models', 'rnn_pos_model.pth')
     tagger.save_model(model_path)
     print(f"Model saved to {model_path}")
 
